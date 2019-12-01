@@ -1,2 +1,2 @@
-# MES Android Apps
+# CrowdHackathon android app
 
