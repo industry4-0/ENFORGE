@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AskStationActivity">
+
+
+    <TextView
+        android:id="@+id/stationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/station"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:textSize="30sp"
+        android:padding="20dp"
+        />
+
+    <Button
+        android:id="@+id/punchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/punchButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:padding="10dp"
+        android:layout_below="@id/stationTextView"
+        android:background="#2196f3"
+        android:onClick="punchStation"
+        />
+
+    <Button
+        android:id="@+id/bendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/BendButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:layout_below="@id/punchButton"
+        android:background="#2196f3"
+        android:padding="10dp"
+        android:onClick="bendStation"
+        />
+
+
+</RelativeLayout>
