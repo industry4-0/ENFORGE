@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="header">
+        <mat-form-field appearance="outline" style="width: 250px;margin-top:18px">
+            <mat-select placeholder="Select a manufacturing plan" [(ngModel)]="selected"
+                (selectionChange)="onSelect($event.value)">
+                <mat-option *ngFor="let plan of plans" [value]="plan.id">{{plan.title}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <table mat-table [dataSource]="dataSource" *ngIf="dataSource" matSort [@fadeInOut]="currentState">
+        <!-- Name Column -->
+        <ng-container matColumnDef="title" sticky>
+            <th mat-header-cell *matHeaderCellDef> Title </th>
+            <td mat-cell *matCellDef="let task"> {{task.title | sentence}} </td>
+        </ng-container>
+        <!-- taskCode Column -->
+        <ng-container matColumnDef="itemCode">
+            <th mat-header-cell *matHeaderCellDef> Code </th>
+            <td mat-cell *matCellDef="let task"> {{task.itemCode || '---'}} </td>
+        </ng-container>
+        <!-- type Column -->
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef class="end-main"> Type </th>
+            <td mat-cell *matCellDef="let task" class="end-main"> {{task.type}} </td>
+        </ng-container>
+        <!-- quantity Column -->
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
+            <td mat-cell *matCellDef="let task">{{task.quantity}}</td>
+        </ng-container>
+        <!-- made Column -->
+        <ng-container matColumnDef="made">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Made </th>
+            <td mat-cell *matCellDef="let task" [ngClass]="task.status == 'Completed' || task.status == 'Failed'? task.status : ''"
+            > {{task.made + '/' + task.quantity}} </td>
+        </ng-container>
+        <!-- status Column -->
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let task"
+                [ngClass]="task.status == 'Completed' || task.status == 'Failed'? task.status : ''">
+                {{task.status | sentence}}
+            </td>
+        </ng-container>
+        <!-- reorder Column -->
+        <ng-container matColumnDef="station">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Station Point </th>
+            <td mat-cell *matCellDef="let task">{{task.station | sentence}}</td>
+        </ng-container>
+
+        <!-- parameters Column -->
+        <ng-container matColumnDef="{{column}}" *ngFor="let column of temp">
+            <th mat-header-cell *matHeaderCellDef title="{{column | sentence}}"> {{column |sentence}} </th>
+            <td mat-cell *matCellDef="let task">
+                <div *ngFor="let param of task.params">
+                    <span *ngIf="param.name == column">{{param.value || '--'}}</span>
+                </div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let task; columns: displayedColumns;"></tr>
+    </table>
+</div>

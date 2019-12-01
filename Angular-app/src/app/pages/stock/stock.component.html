@@ -1,0 +1,87 @@
+    <div class="mat-elevation-z2" [@fadeInOut]>
+        <table mat-table [dataSource]="dataSource" *ngIf="dataSource">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name" sticky>
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let item"> {{item.name}} </td>
+            </ng-container>
+            <!-- itemCode Column -->
+            <ng-container matColumnDef="itemCode">
+                <th mat-header-cell *matHeaderCellDef> Code </th>
+                <td mat-cell *matCellDef="let item"> {{item.itemCode}} </td>
+            </ng-container>
+            <!-- type Column -->
+            <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef> Type </th>
+                <td mat-cell *matCellDef="let item"> {{item.type}} </td>
+            </ng-container>
+            <!-- quantity Column -->
+            <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef> Quantity </th>
+                <td mat-cell *matCellDef="let item; let i = index">
+                    <ng-template [ngIf]="editQuantity[i]" [ngIfElse]="displayQuantity">
+                        <input type="number" class="editable" (click)="$event.stopPropagation();"
+                            [(ngModel)]="quantity[i]">
+                    </ng-template>
+                    <ng-template #displayQuantity>
+                        {{quantity[i]}}
+                    </ng-template>
+                </td>
+            </ng-container>
+            <!-- commited Column -->
+            <ng-container matColumnDef="commited">
+                <th mat-header-cell *matHeaderCellDef> Commited </th>
+                <td mat-cell *matCellDef="let item"> {{item.commited}} </td>
+            </ng-container>
+            <!-- available Column -->
+            <ng-container matColumnDef="available">
+                <th mat-header-cell *matHeaderCellDef> Available </th>
+                <td mat-cell *matCellDef="let item" [ngClass]="item.quantity - item.commited < 0? 'notEnough' : ''">
+                    {{item.quantity - item.commited}} </td>
+            </ng-container>
+            <!-- reorder Column -->
+            <ng-container matColumnDef="reorder">
+                <th mat-header-cell *matHeaderCellDef> Reorder Point </th>
+                <td mat-cell *matCellDef="let item; let i = index">
+                    <ng-template [ngIf]="editReorder[i]" [ngIfElse]="displayReorder">
+                        <input type="number" class="editable" (click)="$event.stopPropagation();"
+                            [(ngModel)]="reorder[i]">
+                    </ng-template>
+                    <ng-template #displayReorder>
+                        {{reorder[i]}}
+                    </ng-template>
+                </td>
+            </ng-container>
+            <!-- makeorbuy Column -->
+            <ng-container matColumnDef="makeorbuy">
+                <th mat-header-cell *matHeaderCellDef class="end-main"> Make/Buy </th>
+                <td mat-cell *matCellDef="let item" class="end-main"
+                    [ngClass]="item.quantity <= item.reorder? 'needMore' : ''">{{item.makeorbuy |sentence}} </td>
+            </ng-container>
+            <!-- parameters Column -->
+            <ng-container matColumnDef="{{column}}" *ngFor="let column of temp">
+                <th mat-header-cell *matHeaderCellDef title="{{column | sentence}}"> {{column |sentence}} </th>
+                <td mat-cell *matCellDef="let item">
+                    <div *ngFor="let param of item.params">
+                        <span *ngIf="param.name == column">{{param.value || '--'}}</span>
+                    </div>
+                </td>
+            </ng-container>
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef>
+                    <button mat-flat-button class="final-action cell-fit" (click)="updateStockAll()">Save All</button>
+                </th>
+                <td mat-cell *matCellDef="let item; let i = index">
+                    <!--<button mat-flat-button *ngIf="item.makeorbuy == 'Make'" class="add-btn" (click)="$event.stopPropagation(); orderPlanDialog(item)">Make</button>-->
+                    <button mat-flat-button class="final-action cell-fit"
+                        (click)="$event.stopPropagation();updateStockItem(item, i)">Save Changes</button>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let item; let i = index; columns: displayedColumns;"
+                (click)="editQuantity[i] = !editQuantity[i];editReorder[i] = !editReorder[i]"></tr>
+        </table>
+
+    </div>
+    <mat-paginator [@fadeInPag] [pageSizeOptions]="[10, 20, 40, 80]" class="sticky-paginator"></mat-paginator>
